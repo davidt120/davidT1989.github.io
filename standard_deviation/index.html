@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="main.css">  
+</head>
+<body>
+  <div class="wrapper">
+    <h1>Welcome to the Standard Deviation Calculator!</h1>
+    <div>&nbsp;</div>
+    <p>Please provide numbers seperated by comma to calculate.</p>
+    <div class="cal_form">
+      <div>&nbsp;</div>             
+      <textarea name="input_value" id="inputbox" cols="38" rows="5"></textarea><br/>        
+      <input type="button" value="Calculate" onclick="calculate()" class="cal_btn">
+      <div>&nbsp;</div> 
+    </div>
+    <div id="output"></div><br/>    
+    <div id="valuechartc"></div>
+  </div>
+  
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/6.0.3/highcharts.js"></script>
+  <script src="main.js"></script>    
+</body>
+</html>

@@ -1,0 +1,39 @@
+.wrapper{
+  width:50%;
+  margin: 0 auto;
+  font-family: arial,helvetica,sans-serif;
+  
+}
+.cal_form{
+  background-color: rgb(202, 199, 199);
+  width:80%;
+  margin: 0 auto;
+  text-align: center;
+}
+textarea{
+  width: 80%;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+table th, td {
+  padding: 5px;    
+}
+.confidence_level{
+  background-color:#000;
+  color:#fff;
+}
+.result{
+  background-color: #518428;
+  color:#fff;
+  padding: 3px;
+}
+.cal_btn{
+  border:1px solid #518428;
+  border-radius: 5px;
+  background-color: #518428;
+  color: #fff;
+  font-size: 20px;
+}     
