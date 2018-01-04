@@ -14,15 +14,17 @@
     <div class="container">
     <h1> Virtual 3d Object on a webpage using a number of images</h1>
       <div class="spritespin"></div>      
-      </div>
+      
     </div>
-    <script type="text/javascript">            
-  $(function(){
+    <script type="text/javascript"> 
+    var frames = SpriteSpin.sourceArray('3d/sample-{lane}-{frame}.jpg', { lane: [0,11], frame: [0,23], digits: 2});
+    var spin = $('.spritespin');  
+    var api;         
     $('.spritespin').spritespin({
-      source: SpriteSpin.sourceArray('3d/sample-{lane}-{frame}.jpg', { lane: [0,11], frame: [0,23], digits: 2}) ,
+      source: frames,
       // width and height of the display
-      width: 400,
-      height: 225,
+      width: 600,
+      height: 325,
       // the number of lanes (vertical angles)
       lanes: 12,
       // the number of frames per lane (per vertical angle)
@@ -37,9 +39,31 @@
       // the initial frame number (within the lane)
       frame: 0,
       // disable autostart of the animation
-      animate: false
+      animate: true
     });
-  });
+    api = spin.spritespin("api");
+  
+  $(document).keydown(function(e) {
+          var b = (e.charCode) ? e.charCode : e.keyCode;
+          if (e.keyCode == 37) {
+            api.stopAnimation();
+    api.prevFrame();
+          }
+          else if(e.keyCode == 39){
+          api.stopAnimation();
+    api.nextFrame();
+          }
+          else if(e.keyCode == 38){
+            api.stopAnimation();
+            api.prevLane();
+            
+          }
+          else if(e.keyCode == 40){
+            api.stopAnimation();
+          api.nextLane();
+          }
+        });
+
 </script>
           </script>
   </body>
