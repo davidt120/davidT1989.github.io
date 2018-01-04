@@ -434,7 +434,7 @@
     // get current touch or mouse position
     if (e.touches !== undefined && e.touches.length > 0){
       data.currentX = e.touches[0].clientX || 0;
-      data.currentY = e.touches[0].clientY || 0;
+      data.currentY = e.touches[0].clientY || 0;0.
     } else {
       data.currentX = e.clientX || 0;
       data.currentY = e.clientY || 0;
@@ -1029,6 +1029,32 @@
     prevFrame: function(){
       return this.skipFrames(-1);
     },
+    updateFrame: function(lane){
+      var frame = data.frame;
+      SpriteSpin.updateFrame(this.data, frame, lane);
+      return this;
+    },
+    // Skips the given number of frames
+    skipLanes: function(step){
+      var data = this.data;
+      var frame = data.frame;
+      var lane = data.lane + (data.reverse ? - step : + step); 
+      SpriteSpin.updateFrame(data, frame, lane );
+      return this;
+    },
+
+    // Updates SpriteSpin so that the next frame is shown
+    nextLane: function(){
+      return this.skipLanes(1);
+    },
+
+    // Updates SpriteSpin so that the previous frame is shown
+    prevLane: function(){
+      return this.skipLanes(-1);
+    },
+    // Gets the current frame number
+    
+
 
     // Starts the animations that will play until the given frame number is reached
     // options:
