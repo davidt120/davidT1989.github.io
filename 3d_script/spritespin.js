@@ -1029,12 +1029,13 @@
     prevFrame: function(){
       return this.skipFrames(-1);
     },
+     // Updates SpriteSpin to the specified Lane.
     updateFrame: function(lane){
       var frame = data.frame;
       SpriteSpin.updateFrame(this.data, frame, lane);
       return this;
     },
-    // Skips the given number of frames
+    // Skips the given number of Lanes
     skipLanes: function(step){
       var data = this.data;
       var frame = data.frame;
@@ -1043,16 +1044,16 @@
       return this;
     },
 
-    // Updates SpriteSpin so that the next frame is shown
+    // Updates SpriteSpin so that the next Lane is shown
     nextLane: function(){
       return this.skipLanes(1);
     },
 
-    // Updates SpriteSpin so that the previous frame is shown
+    // Updates SpriteSpin so that the previous Lane is shown
     prevLane: function(){
       return this.skipLanes(-1);
     },
-    // Gets the current frame number
+    // Gets the current Lane number
     
 
 
