@@ -1029,12 +1029,20 @@
     prevFrame: function(){
       return this.skipFrames(-1);
     },
+<<<<<<< HEAD
+=======
+     // Updates SpriteSpin to the specified Lane.
+>>>>>>> f3b03ae7207d2bfe8746e56dbe5a66eda795e922
     updateFrame: function(lane){
       var frame = data.frame;
       SpriteSpin.updateFrame(this.data, frame, lane);
       return this;
     },
+<<<<<<< HEAD
     // Skips the given number of frames
+=======
+    // Skips the given number of Lanes
+>>>>>>> f3b03ae7207d2bfe8746e56dbe5a66eda795e922
     skipLanes: function(step){
       var data = this.data;
       var frame = data.frame;
@@ -1043,16 +1051,28 @@
       return this;
     },
 
+<<<<<<< HEAD
     // Updates SpriteSpin so that the next frame is shown
+=======
+    // Updates SpriteSpin so that the next Lane is shown
+>>>>>>> f3b03ae7207d2bfe8746e56dbe5a66eda795e922
     nextLane: function(){
       return this.skipLanes(1);
     },
 
+<<<<<<< HEAD
     // Updates SpriteSpin so that the previous frame is shown
     prevLane: function(){
       return this.skipLanes(-1);
     },
     // Gets the current frame number
+=======
+    // Updates SpriteSpin so that the previous Lane is shown
+    prevLane: function(){
+      return this.skipLanes(-1);
+    },
+    // Gets the current Lane number
+>>>>>>> f3b03ae7207d2bfe8746e56dbe5a66eda795e922
     
 
 
