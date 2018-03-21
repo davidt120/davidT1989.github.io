@@ -1,0 +1,51 @@
+body{
+  background-color: #4d5659;
+  height: 470px;
+}
+#content{
+  background-color:#686a5d;
+  height: 470px;
+}
+.panel-group{
+  color: #fff !important;
+}
+.panel{
+  background-color: #d0513a;
+}
+#version{
+  height: 400px;
+}
+#version_link{
+  display: none;
+}
+a{
+  color: #fff;
+  text-decoration: none;
+   
+}
+a:hover{
+  cursor: pointer;
+}
+#title,#show{
+font-size: 30px;
+color: #fff;
+}
+input, button{
+  color: #dbed77;
+  background-color: #cb5c3c;
+  padding: 5px 7px;
+}
+.leftside{
+  background-color: #686a5d;
+}
+#title{
+  height: 33px;
+}
+#showverse{
+  height: 360px;
+  font-size: 26px;
+  color: #fff;
+}
+#buttonarea{
+  text-align: center;
+}

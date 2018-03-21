@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<BornFX>
+	<theme name="Encouragement">
+		<book name="Romans">
+			<chapter number="8">
+				<verse number="37"></verse>
+				<verse number="38"></verse>
+				<verse number="39"></verse>
+			</chapter>
+		</book>
+		<book name="2 Corinthians">
+			<chapter number="5">
+				<verse number="1"></verse>
+			</chapter>
+		</book>
+		<book name="John">
+			<chapter number="10">
+				<verse number="28"></verse>
+				<verse number="29"></verse>
+			</chapter>
+		</book>
+		<book name="Psalm">
+			<chapter number="91">
+				<verse number="1"></verse>
+				<verse number="2"></verse>
+				<verse number="3"></verse>
+				<verse number="4"></verse>
+			</chapter>
+		</book>
+		<book name="Romans">
+			<chapter number="8">
+				<verse number="28"></verse>
+			</chapter>
+		</book>
+		<book name="Isaiah">
+			<chapter number="40">
+				<verse number="31"></verse>
+			</chapter>
+		</book>
+		<book name="Jeremiah">
+			<chapter number="29">
+				<verse number="11"></verse>
+			</chapter>
+		</book>
+		<book name="Romans">
+			<chapter number="8">
+				<verse number="31"></verse>
+			</chapter>
+		</book>
+		<book name="Ephesians">
+			<chapter number="1">
+				<verse number="4"></verse>
+			</chapter>
+		</book>
+		<book name="Matthew">
+			<chapter number="11">
+				<verse number="28"></verse>
+			</chapter>
+		</book>
+		<book name="Psalm">
+			<chapter number="34">
+				<verse number="18"></verse>
+			</chapter>
+		</book>
+		<book name="I John">
+			<chapter number="4">
+				<verse number="4"></verse>
+			</chapter>
+		</book>
+		<book name="Deuteronomy">
+			<chapter number="31">
+				<verse number="6"></verse>
+			</chapter>
+		</book>
+		<book name="Isaiah">
+			<chapter number="41">
+				<verse number="1"></verse>
+			</chapter>
+		</book>
+		<book name="Isaiah">
+			<chapter number="54">
+				<verse number="17"></verse>
+			</chapter>
+		</book>
+		<book name="Zephaniah">
+			<chapter number="3">
+				<verse number="17"></verse>
+			</chapter>
+		</book>
+		<book name="John">
+			<chapter number="14">
+				<verse number="27"></verse>
+			</chapter>
+		</book>
+		<book name="Psalm">
+			<chapter number="32">
+				<verse number="8"></verse>
+			</chapter>
+		</book>
+		<book name="John">
+			<chapter number="16">
+				<verse number="33"></verse>
+			</chapter>
+		</book>
+		<book name="I Corinthians">
+			<chapter number="10">
+				<verse number="13"></verse>
+			</chapter>
+		</book>
+	</theme>
+	<theme name="Strength">
+		<book name="Philippians">
+			<chapter number="4">
+				<verse number="13"></verse>
+			</chapter>
+		</book>
+		<book name="Deuteronomy">
+			<chapter number="31">
+				<verse number="6"></verse>
+			</chapter>
+		</book>
+		<book name="Deuteronomy">
+			<chapter number="20">
+				<verse number="4"></verse>
+			</chapter>
+		</book>
+		<book name="2 Corinthians">
+			<chapter number="12">
+				<verse number="9"></verse>
+				<verse number="10"></verse>
+			</chapter>
+		</book>
+		<book name="2 Corinthians">
+			<chapter number="12">
+				<verse number="9"></verse>
+				<verse number="10"></verse>
+				<verse number="39"></verse>
+			</chapter>
+		</book>
+				<book name="Isaiah">
+			<chapter number="40">
+				<verse number="31"></verse>
+			</chapter>
+		</book>
+				<book name="Psalms">
+			<chapter number="31">
+				<verse number="24"></verse>
+			</chapter>
+		</book>
+		<book name="1 Corinthians">
+			<chapter number="16">
+				<verse number="13"></verse>
+			</chapter>
+		</book>
+		<book name="Isaiah">
+			<chapter number="41">
+				<verse number="10"></verse>
+			</chapter>
+		</book>
+		<book name="Exodus">
+			<chapter number="15">
+				<verse number="2"></verse>
+			</chapter>
+		</book>
+		<book name="Psalms">
+			<chapter number="23">
+				<verse number="4"></verse>
+			</chapter>
+		</book>
+		<book name="Ephesians">
+			<chapter number="6">
+				<verse number="10"></verse>
+			</chapter>
+		</book>
+		<book name="1 Chronicles">
+			<chapter number="16">
+				<verse number="11"></verse>
+			</chapter>
+		</book>
+		<book name="1 Peter">
+			<chapter number="4">
+				<verse number="11"></verse>
+			</chapter>
+		</book>
+		<book name="Philippians">
+			<chapter number="1">
+				<verse number="28"></verse>
+			</chapter>
+		</book>
+		<book name="Job">
+			<chapter number="36">
+				<verse number="5"></verse>
+			</chapter>
+		</book>
+		<book name="2 Samuel">
+			<chapter number="22">
+				<verse number="40"></verse>
+			</chapter>
+		</book>
+		<book name="Psalm">
+			<chapter number="46">
+				<verse number="1"></verse>
+			</chapter>
+		</book>
+		<book name="2 Samuel">
+			<chapter number="2">
+				<verse number="1"></verse>
+			</chapter>
+		</book>
+	</theme>
+<theme name="Faith">
+		<book name="Hebrews">
+			<chapter number="11">
+				<verse number="6"></verse>
+			</chapter>
+		</book>
+</theme>
+<theme name="Love">
+		<book name="1 Corinthians">
+			<chapter number="13">
+				<verse number="4"></verse>
+				<verse number="5"></verse>
+				<verse number="6"></verse>
+				<verse number="7"></verse>
+			</chapter>
+		</book>
+</theme>
+<theme name="Courage">
+		<book name="Deuteronomy">
+			<chapter number="31">
+				<verse number="6"></verse>
+			</chapter>
+		</book>
+</theme>
+</BornFX>

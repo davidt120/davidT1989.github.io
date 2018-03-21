@@ -1,0 +1,284 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<title>Bible Translation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="bootstrap.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+
+span {
+  cursor: pointer;
+} 
+</style>
+<body>
+  <div class="container-fluid">
+      <div class="row">
+        <div class="panel col-md-4 col-lg-4 col-sm-4">          
+          <input type="button" class="leftside" value="THEME" onclick="theme()"/>
+          <input type="button" class="leftside" value="NEW TESTAMENT" onclick="new_test()"/>
+          <input type="button" class="leftside" value="OLD TESTAMENT" onclick="old_test()"/><br/>
+          <div id="version">                           
+          </div>
+          <input type="button" class="leftside" value="USER"/>
+          <input type="button" class="leftside" value="CLEAR" onclick="clean()"/>
+          <input type="button" class="leftside" value="MEMORIZED"/>
+          <input type="button" class="leftside" value="VERSION" onclick="version()"/>
+        </div>       
+        <div  id="content" class="col-md-8 col-lg-8 col-sm-8">
+          <p id="title"></p>          
+          <p id="showverse"></p><br/>
+          <div id="buttonarea">
+            <input type="button" value="RESET" onclick="reset()">
+            <input type="button" value="Previous" onclick="Prev()" />
+            <input type="button" value="NEXT" onclick="Next()" />          
+            <button type="button" onclick="save()">SAVE</button>  
+          </div>   
+        </div>  
+      </div>
+      
+  </div>    
+        <script>
+          var xmlDoc;
+          function version(){       
+        var str = "<a id='america' onclick='displayVersion(1)'>Amercian Standard Version</a><br><a id='king' onclick='displayVersion(2)'>King James Version</a>";
+        document.getElementById('version').innerHTML = str;
+        $('#version').css('overflow', 'hidden');
+      }
+
+      function displayVersion(a){
+        if (a === 1) {
+                if (window.XMLHttpRequest){
+              var xmlhttp = new XMLHttpRequest();
+            } else {
+              xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }              
+            xmlhttp.open("GET", "asv.xml", false);
+              xmlhttp.send();
+              xmlDoc = xmlhttp.responseXML;     
+        }
+        else if (a === 2 ){
+              if (window.XMLHttpRequest){
+            var xmlhttp1 = new XMLHttpRequest();
+          } else {
+            xmlhttp1= new ActiveXObject("Microsoft.XMLHTTP");
+          }              
+          xmlhttp1.open("GET", "kjv.xml", false);
+            xmlhttp1.send();
+            xmlDoc = xmlhttp1.responseXML; 
+         }           
+        }
+           
+        function theme(){
+        if (window.XMLHttpRequest){
+              var xmlhttp2 = new XMLHttpRequest();
+            } else {
+              xmlhttp2 = new ActiveXObject("Microsoft.XMLHTTP");
+            }              
+            xmlhttp2.open("GET", "theme.xml", false);
+              xmlhttp2.send();
+              var xmlDoc2 = xmlhttp2.responseXML;
+              console.log(xmlDoc2); 
+              $('#version').css('overflow', 'scroll');
+              $('#version').css('overflow-x', 'hidden'); 
+              var theme = xmlDoc2.getElementsByTagName("theme"); 
+              txt = "";
+      txt +="<div class='panel-group' id='accordion1'>";
+      for (var i = 0; i < theme.length; i++) {        
+        txt += "<div class='panel panel-default'>";
+        txt +="<div class='panel-heading'>";
+        txt +="<h4 class='panel-title'>";
+        txt +="<a data-toggle='collapse' data-parent='#accordion1' href='#link" + i  + "'>";
+        txt += theme[i].getAttribute("name")+"</a></h4>";
+        txt +="</div>";
+        txt +="<div id='link" +i +"' class='panel-collapse collapse'>";
+        txt +="<div class='panel-body'>";
+        txt +="<div class='panel-group' id='accordion2'>";
+
+          var book = theme[i].getElementsByTagName("book");          
+        for (var j = 0; j < book.length; j++) {          
+          txt +="<div class='panel panel-default'>";
+          txt +="<div class='panel-heading'>";
+          txt +="<h4 class='panel-title'>";
+          txt +="<a data-toggle='collapse' data-parent='#accordion2' href='#book"+i+"_"+j + "'>";
+          txt +=  book[j].getAttribute("name") + "</a></h4>";
+          txt +="</div>";
+          txt +="<div id='book"+i+"_"+j+"' class='panel-collapse collapse'>";
+          txt +="<div class='panel-body'>";
+              txt +="<div class='panel-group' id='accordion3'>";
+          var chapter = book[j].getElementsByTagName("chapter");
+          for (var k = 0; k < chapter.length; k++) {
+            txt +="<div class='panel panel-default'>";
+          txt +="<div class='panel-heading'>";
+          txt +="<h4 class='panel-title'>";
+          txt +="<a data-toggle='collapse' data-parent='#accordion3' href='#chapter"+i+"_"+j +"_"+k+ "'>";
+          txt += "Chapter"+ chapter[k].getAttribute("number") + "</a></h4>";
+          txt +="</div>";
+          txt +="<div id='chapter"+i+"_"+j+"_"+k+"' class='panel-collapse collapse'>";
+          txt +="<div class='panel-body'>";
+          var verse = chapter[k].getElementsByTagName("verse");
+            for (var l = 0; l < verse.length; l++) {
+              txt += "<a>Verse"+verse[l].getAttribute("number")+"</a><br>";               
+            }
+            txt +="</div></div></div>";
+            txt +="</div>";          
+          }
+          txt +="</div></div>";
+          txt +="</div>";
+        }
+        txt +="</div></div></div>";         
+        txt +="</div>";        
+      }
+      txt += "</div>";  
+      document.getElementById("version").innerHTML = txt;
+      }
+
+    function new_test(){
+      $('#version').css('overflow', 'scroll');
+      $('#version').css('overflow-x', 'hidden');
+      var testament = xmlDoc.getElementsByTagName("testament");
+      var book = testament[1].getElementsByTagName("book");
+     
+      txt = "";
+      txt +="<div class='panel-group' id='accordion1'>";
+      for (var i = 0; i < book.length; i++) {        
+        txt += "<div class='panel panel-default'>";
+        txt +="<div class='panel-heading'>";
+        txt +="<h4 class='panel-title'>";
+        txt +="<a data-toggle='collapse' data-parent='#accordion1' href='#link" + i  + "'>";
+        txt += book[i].getAttribute("name")+"</a></h4>";
+        txt +="</div>";
+        txt +="<div id='link" +i +"' class='panel-collapse collapse'>";
+        txt +="<div class='panel-body'>";
+        txt +="<div class='panel-group' id='accordion2'>";
+
+          var chapter = book[i].getElementsByTagName("chapter");          
+        for (var j = 0; j < chapter.length; j++) {          
+          txt +="<div class='panel panel-default'>";
+          txt +="<div class='panel-heading'>";
+          txt +="<h4 class='panel-title'>";
+          txt +="<a data-toggle='collapse' data-parent='#accordion2' href='#chapter"+i+"_"+j + "'>";
+          txt += "Chapter" + chapter[j].getAttribute("number") + "</a></h4>";
+          txt +="</div>";
+          txt +="<div id='chapter"+i+"_"+j+"' class='panel-collapse collapse'>";
+          txt +="<div class='panel-body'>";
+          var verse = chapter[j].getElementsByTagName("verse");
+          for (var k = 0; k < verse.length; k++) {
+            txt += "<a onclick='displayVerse(1, "+ i +", "+ j +", "+ k +")'>Verse"+verse[k].getAttribute("number")+"</a><br>";            
+          }
+          txt +="</div></div>";
+          txt +="</div>";
+        }
+        txt +="</div></div></div>";         
+        txt +="</div>";        
+      }
+      txt += "</div>";
+      document.getElementById("version").innerHTML = txt;
+      
+    }
+    function old_test(){
+      $('#version').css('overflow', 'scroll');
+      $('#version').css('overflow-x', 'hidden');
+      var testament = xmlDoc.getElementsByTagName("testament");
+      var book = testament[0].getElementsByTagName("book");       
+      txt = "";
+      txt +="<div class='panel-group' id='accordion1'>";
+      for (var i = 0; i < book.length; i++) {        
+        txt += "<div class='panel panel-default'>";
+        txt +="<div class='panel-heading'>";
+        txt +="<h4 class='panel-title'>";
+        txt +="<a data-toggle='collapse' data-parent='#accordion1' href='#link" + i  + "'>";
+        txt += book[i].getAttribute("name")+"</a></h4>";
+        txt +="</div>";
+        txt +="<div id='link" +i +"' class='panel-collapse collapse'>";
+        txt +="<div class='panel-body'>";
+        txt +="<div class='panel-group' id='accordion2'>";
+
+          var chapter = book[i].getElementsByTagName("chapter");          
+        for (var j = 0; j < chapter.length; j++) {          
+          txt +="<div class='panel panel-default'>";
+          txt +="<div class='panel-heading'>";
+          txt +="<h4 class='panel-title'>";
+          txt +="<a data-toggle='collapse' data-parent='#accordion2' href='#chapter"+i+"_"+j + "'>";
+          txt += "Chapter" + chapter[j].getAttribute("number") + "</a></h4>";
+          txt +="</div>";
+          txt +="<div id='chapter"+i+"_"+j+"' class='panel-collapse collapse'>";
+          txt +="<div class='panel-body'>";
+          var verse = chapter[j].getElementsByTagName("verse");
+          for (var k = 0; k < verse.length; k++) {
+            txt += "<a onclick='displayVerse(0, "+ i +", "+ j +", "+ k +")'>Verse"+verse[k].getAttribute("number")+"</a><br>";        
+          }
+          txt +="</div></div>";
+          txt +="</div>";
+        }
+        txt +="</div></div></div>";         
+        txt +="</div>";        
+      }
+      txt += "</div>";
+      document.getElementById("version").innerHTML = txt; 
+    }     
+    var w,x,y,z;
+    function displayVerse(a, b, c, d){
+      var testament = xmlDoc.getElementsByTagName("testament");
+      var book = testament[a].getElementsByTagName("book");
+      var chapter = book[b].getElementsByTagName("chapter");
+      var verse = chapter[c].getElementsByTagName("verse");
+      var showVerse = verse[d].childNodes[0].nodeValue;
+     document.getElementById('title').innerHTML = book[b].getAttribute("name") +" "+chapter[c].getAttribute("number")+ ":"+verse[d].getAttribute("number");
+      document.getElementById('showverse').innerHTML = showVerse ;
+      w=a; x=b; y=c; z=d; 
+      saved =[];
+      $(function() {
+          var contents = $("#showverse").text().split(' '),
+          modText = '', underlined = '', k=0;
+          for (var i = 0; i < contents.length; i++) {
+              modText += '<span>' + contents[i] + '</span> ';
+          }  
+          
+          $('#showverse').html(modText);
+
+          $('#showverse').click(function (e) {
+            
+            for (var i = 0; i < $(e.target).text().length; i++) {
+              underlined += '_';      
+            }
+            saved[k] = $(e.target).text();
+            $(e.target).html(underlined); 
+            underlined = '';
+            k += 1;     
+          });
+      });
+    }   
+   
+    function Next()
+    {
+      var testament = xmlDoc.getElementsByTagName("testament");
+      var book = testament[w].getElementsByTagName("book");
+      var chapter = book[x].getElementsByTagName("chapter");
+      var verse = chapter[y].getElementsByTagName("verse");   
+      if(z<((verse.length)-1))
+      {        
+        z++;
+        displayVerse(w, x, y, z);
+      }     
+    }
+    function Prev(){
+      if(z>0)
+      {
+        z--;
+        displayVerse(w, x, y, z);
+      }
+    } 
+    function reset(){
+      displayVerse(w, x, y, z);
+    }   
+   function clean(){
+    $('#version').css('overflow', 'hidden');
+     document.getElementById("version").innerHTML = "";
+   }
+   
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>  
+</body>
+</html>
