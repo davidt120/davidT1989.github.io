@@ -1545,7 +1545,6 @@ for (var i = 0; i < objArray.length; i++) {
         }       
     }
 }
-
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
@@ -1632,7 +1631,8 @@ var activity = {
     } ]
 };
 var yAxisName = ["Slagen per minuut", "Intensiteit", "   "], Chartheight = [400, 200, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d'];
-var yAxisMax =[200, 10, 0], tipColor =['#8ab6e7', '#a6ea89', '#ffffff'], xMin = xValue[0];
+var yAxisMax =[200, 10, 0], tipColor =['#ebf3fb', '#e3f8da', '#ffffff'], xMin = xValue[0];
+var tipValue = ['{point.y}', '{point.y}', '{point.x}']
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -1690,10 +1690,10 @@ var yAxisMax =[200, 10, 0], tipColor =['#8ab6e7', '#a6ea89', '#ffffff'], xMin = 
                         max:yAxisMax[i]
                                             
                     },  
-                    /*tooltip: {
+                    tooltip: {
                         crosshair:true,
                         positioner: function (labelWidth, labelHeight, point) {
-                            var tooltipX = point.plotX + 30;
+                            var tooltipX = point.plotX + 40;
                             return {
                                 // right aligned
                                 x: tooltipX,
@@ -1701,16 +1701,25 @@ var yAxisMax =[200, 10, 0], tipColor =['#8ab6e7', '#a6ea89', '#ffffff'], xMin = 
                             };
                         },
                         borderWidth: 1,
+                        borderRadius: 5,
                         backgroundColor: tipColor[i],
-                        pointFormat: '{point.y}',
+                        formatter: function(){
+                           if (i=== 2){
+                            var times = this.x;
+                                var hours1 = parseInt(times/3600);
+                                var mins1 = parseInt((parseInt(times%3600))/60);
+                                return hours1 + ":" + mins1;                               
+                           }
+                           return this.y;
+                        },
                         headerFormat: '',
                         shadow: false,
                         style: {
-                            fontSize: '18px'
+                            fontSize: '10px'
                         },
                         valueDecimals: dataset.valueDecimals
-                    }, */               
-                   
+                    },               
+                
                     series: [{
                         data: dataset.data,
                         name: dataset.name,
@@ -1718,7 +1727,9 @@ var yAxisMax =[200, 10, 0], tipColor =['#8ab6e7', '#a6ea89', '#ffffff'], xMin = 
                         color: ChartColor[i],
                         
                         fillOpacity: 0.7,
-                        tooltip: {                           
+                        tooltip: {  
+                            crosshair:[true, true],
+                            align: 'left',                         
                             value: ' ' + dataset.unit
                         }
                     }]
