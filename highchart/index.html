@@ -1538,7 +1538,7 @@ for (var i = 0; i < objArray1.length; i++) {
 }
 
 for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = NaN;
+    seizures[i] = 0;
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
             seizures[i] = 0;
@@ -1626,9 +1626,10 @@ var activity = {
         "name": "Seizures",
         "data": seizures,
         "unit": "",
-        "type": "scatter",
+        "type": "line",
         "valueDecimals": 0
-    } ]
+    }
+        ]
 };
 var yAxisName = ["Slagen per minuut", "Intensiteit", "   "], Chartheight = [400, 200, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d'];
 var yAxisMax =[200, 10, 0], tipColor =['#ebf3fb', '#e3f8da', '#ffffff'], xMin = xValue[0];
