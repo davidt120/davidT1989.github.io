@@ -1539,7 +1539,7 @@ for (var i = 0; i < objArray1.length; i++) {
 }
 
 for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = 0; scatters[i] =NaN;
+    seizures[i] = 0; scatters[i] =null;
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
             scatters[i] = 0;
@@ -1638,7 +1638,7 @@ var activity = {
         "name": "Scatters",
         "data": scatters,
         "unit": "",
-        "type": "scatter",
+        "type": "line",
         "marker": { radius: 10, symbol: 'diamond'},
         "valueDecimals": 0
     }
@@ -1646,7 +1646,7 @@ var activity = {
         ]
 };
 var yAxisName = ["Slagen per minuut", "Intensiteit", "",""], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
-var yAxisMax =[200, 10, 0, 0], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
+var yAxisMax =[200, 10, null, null], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
 var OpacityValue = [0, 0, 0, 0.7];
 var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
         $.each(activity.datasets, function (i, dataset) {
@@ -1690,7 +1690,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         min: xMin,
                     
                         labels: {
-                           
+                          
                             formatter: function(){
                                 var times = this.value;
                                 var hours1 = parseInt(times/3600);
@@ -1699,7 +1699,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                                 if (mins1 <10){mins1 = "0" + mins1;}
                                 return hours1 + ":" + mins1;
                             }
-                        }
+                        }                        
                     },
                     yAxis: {
                         title: {
@@ -1708,10 +1708,11 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         max:yAxisMax[i]
                                             
                     },  
+                   
                     tooltip: {
                         crosshair:true,
                         positioner: function (labelWidth, labelHeight, point) {
-                            var tooltipX = point.plotX + 40;
+                            var tooltipX = point.plotX + 55;
                             return {
                                 // right aligned
                                 x: tooltipX,
@@ -1746,7 +1747,12 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         type: dataset.type,
                         marker: dataset.marker,
                         color: ChartColor[i],
+<<<<<<< HEAD
+                        lineWidth: 1,
+                        pointStart:xMin,                        
+=======
 			lineWidth: 1,                        
+>>>>>>> 38afe32f3f73bfc448b31c9dbba44179be198ce3
                         fillOpacity: 0.7,
                         tooltip: {  
                             crosshair:[true, true],
