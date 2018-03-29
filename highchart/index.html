@@ -15,16 +15,17 @@
 }
 .highcharts-crosshair-label {
 	stroke-width: 1px;
-	stroke: gray;
+	stroke: white;
 }
+
 .highcharts-crosshair-label text {
 	fill: black;
 }
 .highcharts-markers {
     stroke: #245380;
     stroke-width: 2;
-    fill-opacity:0;
 }
+
 </style>
 <body>
   <div id="container" style="width:100%; float:right;height:400px;"></div>
@@ -1511,7 +1512,7 @@ var array1 = CSVToArray(seizuresdata);
         }
     }
     
-    var xValue=[], heartrate=[], movement =[], seizure =[], label =[], seizures =[];
+    var xValue=[], heartrate=[], movement =[], seizure =[], label =[], seizures =[], scatters =[];
 for (var i = 0; i < objArray.length; i++) {
     var time =objArray[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -1538,13 +1539,14 @@ for (var i = 0; i < objArray1.length; i++) {
 }
 
 for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = 0;
+    seizures[i] = 0; scatters[i] =NaN;
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
-            seizures[i] = 0;
+            scatters[i] = 0;
         }       
     }
 }
+console.log(seizures, scatters);
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
@@ -1615,25 +1617,38 @@ var activity = {
         "data": heartrate,
         "unit": "",
         "type": "area",
+        "marker": {enabled:false},
         "valueDecimals": 0
     }, {
         "name": "Beweging",
         "data": movement,
         "unit": "",
         "type": "area",
+        "marker": {enabled:false},
         "valueDecimals": 0
     },{
         "name": "Seizures",
         "data": seizures,
         "unit": "",
         "type": "line",
+        "marker": {enabled:false},
+        "valueDecimals": 0
+    },
+    {
+        "name": "Scatters",
+        "data": scatters,
+        "unit": "",
+        "type": "scatter",
+        "marker": { radius: 10, symbol: 'diamond'},
         "valueDecimals": 0
     }
+    
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "   "], Chartheight = [400, 200, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d'];
-var yAxisMax =[200, 10, 0], tipColor =['#ebf3fb', '#e3f8da', '#ffffff'], xMin = xValue[0];
-var tipValue = ['{point.y}', '{point.y}', '{point.x}']
+var yAxisName = ["Slagen per minuut", "Intensiteit", "",""], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
+var yAxisMax =[200, 10, 0, 0], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
+var OpacityValue = [0, 0, 0, 0.7];
+var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -1705,7 +1720,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}']
                         borderRadius: 5,
                         backgroundColor: tipColor[i],
                         formatter: function(){
-                           if (i=== 2){
+                           if (i >= 2){
                             var times = this.x;
                                 var hours1 = parseInt(times/3600);
                                 var mins1 = parseInt((parseInt(times%3600))/60);
@@ -1725,6 +1740,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}']
                         data: dataset.data,
                         name: dataset.name,
                         type: dataset.type,
+                        marker: dataset.marker,
                         color: ChartColor[i],
                         
                         fillOpacity: 0.7,
