@@ -1695,6 +1695,8 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                                 var times = this.value;
                                 var hours1 = parseInt(times/3600);
                                 var mins1 = parseInt((parseInt(times%3600))/60);
+                                if (hours1 <10){hours1 = "0" + hours1;}
+                                if (mins1 <10){mins1 = "0" + mins1;}
                                 return hours1 + ":" + mins1;
                             }
                         }
@@ -1724,6 +1726,8 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                             var times = this.x;
                                 var hours1 = parseInt(times/3600);
                                 var mins1 = parseInt((parseInt(times%3600))/60);
+                                if (hours1 <10){hours1 = "0" + hours1;}
+                                if (mins1 <10){mins1 = "0" + mins1;}
                                 return hours1 + ":" + mins1;                               
                            }
                            return this.y;
