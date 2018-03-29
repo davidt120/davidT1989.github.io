@@ -1645,7 +1645,7 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "",""], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
+var yAxisName = ["Slagen per minuut", "Intensiteit", null, null], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
 var yAxisMax =[200, 10, null, null], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
 var OpacityValue = [0, 0, 0, 0.7];
 var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
@@ -1749,8 +1749,15 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         color: ChartColor[i],
                         lineWidth: 1,
                         pointStart:xMin,                        
-			lineWidth: 1,                        
                         fillOpacity: 0.7,
+                        
+                    fillColor: {
+                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
+                        stops: [
+                            [0, ChartColor[i]],
+                            [1, '#f4f4f4']
+                        ]
+                    },
                         tooltip: {  
                             crosshair:[true, true],
                             align: 'left',                         
