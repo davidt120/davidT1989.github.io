@@ -1525,7 +1525,6 @@ for (var i = 0; i < objArray.length; i++) {
     heartrate[i] =parseInt(objArray[i][" Heartrate"]);
     movement[i] = parseInt(objArray[i][" Movement"]);
 }
-console.log(objArray1);
 for (var i = 0; i < objArray1.length; i++) {
     var time =objArray1[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -1546,7 +1545,6 @@ for (var i = 0; i < objArray.length; i++) {
         }       
     }
 }
-console.log(seizures, scatters);
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
