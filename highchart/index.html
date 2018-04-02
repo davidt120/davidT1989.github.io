@@ -1440,7 +1440,7 @@
     12:22:00,Heartrate increase
     </pre>
     
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   
@@ -1525,6 +1525,7 @@ for (var i = 0; i < objArray.length; i++) {
     heartrate[i] =parseInt(objArray[i][" Heartrate"]);
     movement[i] = parseInt(objArray[i][" Movement"]);
 }
+console.log(objArray1);
 for (var i = 0; i < objArray1.length; i++) {
     var time =objArray1[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -1545,6 +1546,7 @@ for (var i = 0; i < objArray.length; i++) {
         }       
     }
 }
+console.log(seizures, scatters);
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
@@ -1625,7 +1627,7 @@ var activity = {
         "marker": {enabled:false},
         "valueDecimals": 0
     },{
-        "name": "Seizures",
+        "name": "Aanvallen",
         "data": seizures,
         "unit": "",
         "type": "line",
@@ -1633,7 +1635,7 @@ var activity = {
         "valueDecimals": 0
     },
     {
-        "name": "Scatters",
+        "name": "Technische alarmen",
         "data": scatters,
         "unit": "",
         "type": "line",
@@ -1644,7 +1646,7 @@ var activity = {
         ]
 };
 var yAxisName = ["Slagen per minuut", "Intensiteit", null, null], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
-var yAxisMax =[200, 10, null, null], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
+var yAxisMax =[200, 10, 100, 10], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
 var OpacityValue = [0, 0, 0, 0.7];
 var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
         $.each(activity.datasets, function (i, dataset) {
@@ -1678,9 +1680,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                     xAxis: {
                        crosshair:{
                         dashStyle:'dash',
-                        formatter: function(){
-                            return this.points[i].y;
-                        }
+                        
                        },
                         events: {
                             setExtremes: syncExtremes
@@ -1689,13 +1689,18 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                     
                         labels: {
                           
+                          
                             formatter: function(){
+                                if(i<2){
                                 var times = this.value;
                                 var hours1 = parseInt(times/3600);
                                 var mins1 = parseInt((parseInt(times%3600))/60);
                                 if (hours1 <10){hours1 = "0" + hours1;}
                                 if (mins1 <10){mins1 = "0" + mins1;}
-                                return hours1 + ":" + mins1;
+                                return hours1 + ":" + mins1;}
+                                else {
+                                    return '';
+                                }
                             }
                         }                        
                     },
@@ -1709,6 +1714,7 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                    
                     tooltip: {
                         crosshair:true,
+                        labelWidth:50, 
                         positioner: function (labelWidth, labelHeight, point) {
                             var tooltipX = point.plotX + 55;
                             return {
