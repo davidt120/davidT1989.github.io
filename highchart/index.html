@@ -1448,7 +1448,8 @@
   <script src="https://code.highcharts.com/highcharts.js"></script>
   <script src="https://code.highcharts.com/modules/exporting.js"></script>
   
-  <script>
+  <script> 
+
 function CSVToArray(strData, strDelimiter) {
     strDelimiter = (strDelimiter || ",");    
     var objPattern = new RegExp((   
@@ -1561,19 +1562,23 @@ for (var i = 0; i < objArray2.length; i++) {
     alarm[i] = parseInt(hour*3600 + minute*60 + seconds);
     text1[i] = objArray2[i][" Label"];    
 }
+var ss = 100;
 for (var i = 0; i < objArray.length; i++) {
     seizures[i] = null; texts[i] ="";    
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
-            seizures[i] = 100; texts[i] = text[j];
+            seizures[i] = ss; texts[i] = text[j];
+            ss = ss + 1;
         }       
     }
 }
+var zz = 100;
 for (var i = 0; i < objArray.length; i++) {
     alarms[i] =null;    texts1[i] = "";
     for (var j = 0; j < objArray2.length; j++) {
         if (objArray[i].Time.toString() === objArray2[j].Time.toString()) {
-            alarms[i] = 100; texts1[i] =text1[j];
+            alarms[i] = zz; texts1[i] =text1[j];
+            zz = zz + 1;
         }       
     }
 }
@@ -1649,6 +1654,7 @@ var activity = {
         "type": "area",
         "marker": {enabled:false},
         "valueDecimals": 0,
+        "text":""
     }, {
         "name": "Beweging",
         "data": movement,
@@ -1656,6 +1662,7 @@ var activity = {
         "type": "area",
         "marker": {enabled:false},
         "valueDecimals": 0,
+        "text":""
     
     },{
         "name": "Aanvallen",
@@ -1664,7 +1671,7 @@ var activity = {
         "type": "scatter",
         "marker": { radius: 10, symbol: 'diamond'},
         "valueDecimals": 0,
-
+        "text":texts
     },
     {
         "name": "Technische alarmen",
@@ -1673,6 +1680,7 @@ var activity = {
         "type": "scatter",
         "marker": { radius: 10, symbol: 'square'},
         "valueDecimals": 0,
+        "text":texts1
 
     }
     
@@ -1772,10 +1780,18 @@ console.log(Caption, Caption1);
                         backgroundColor: tipColor[i],
                         formatter: function(){
                            if (i === 2){
-                             return "<p>"+Caption[i]+"</p>";                               
+                             for (var j = 0; j < seizures.length; j++) {
+                                 if(this.y === seizures[j]){
+                                    return Caption[j];
+                                 }                        
+                             }                               
                            }
-                           if (i === 3){
-                             return "<p>"+Caption1[i]+"</p>";                               
+                           else if (i === 3){
+                            for (var j = 0; j < alarms.length; j++) {
+                                 if(this.y === alarms[j]){
+                                    return Caption1[j];
+                                 }                        
+                             }                         
                            }
                            return this.y;
                         },
