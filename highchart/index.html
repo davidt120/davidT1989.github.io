@@ -1439,6 +1439,10 @@
     12:10:48,Motion
     12:22:00,Heartrate increase
     </pre>
+    <pre id="csv_alarm" style="display:none">Time, Label
+    12:09:48,Lost connection
+    12:15:00,Battery low
+        </pre>
     
   <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -1493,8 +1497,10 @@ function CSVToArray(strData, strDelimiter) {
 
 csvdata = document.getElementById("csv").innerHTML;
 seizuresdata = document.getElementById("csv_seizures").innerHTML;
+alarmdata = document.getElementById("csv_alarm").innerHTML;
 var array = CSVToArray(csvdata);
 var array1 = CSVToArray(seizuresdata);
+var array2 = CSVToArray(alarmdata);
     var objArray = [];
     for (var i = 1; i < array.length; i++) {
         objArray[i - 1] = {};
@@ -1511,8 +1517,15 @@ var array1 = CSVToArray(seizuresdata);
             objArray1[i - 1][key] = array1[i][k]
         }
     }
-    
-    var xValue=[], heartrate=[], movement =[], seizure =[], label =[], seizures =[], scatters =[];
+    var objArray2 = [];
+    for (var i = 1; i < array2.length; i++) {
+        objArray2[i - 1] = {};
+        for (var k = 0; k < array2[0].length && k < array2[i].length; k++) {
+            var key = array2[0][k];
+            objArray2[i - 1][key] = array2[i][k]
+        }
+    }
+    var xValue=[], heartrate=[], movement =[], seizure =[], text =[], seizures =[], alarms =[], alarm =[], text1=[], texts =[], texts1 = [];
 for (var i = 0; i < objArray.length; i++) {
     var time =objArray[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -1525,7 +1538,7 @@ for (var i = 0; i < objArray.length; i++) {
     heartrate[i] =parseInt(objArray[i][" Heartrate"]);
     movement[i] = parseInt(objArray[i][" Movement"]);
 }
-console.log(objArray1);
+
 for (var i = 0; i < objArray1.length; i++) {
     var time =objArray1[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -1535,18 +1548,35 @@ for (var i = 0; i < objArray1.length; i++) {
     var minute = parseInt(hms[1]);
     var seconds = parseInt(hms[2]);
     seizure[i] = parseInt(hour*3600 + minute*60 + seconds);
-    label[i] = objArray1[i][" Label"];    
+    text[i] = objArray1[i][" Label"];    
 }
-
+for (var i = 0; i < objArray2.length; i++) {
+    var time =objArray2[i].Time.toString();    
+    var realtime =time.replace(/\s/g, '').toString();
+    var hms = realtime.split(":");
+    var hour = parseInt(hms[0]);
+    hour1 = hour.toString();
+    var minute = parseInt(hms[1]);
+    var seconds = parseInt(hms[2]);
+    alarm[i] = parseInt(hour*3600 + minute*60 + seconds);
+    text1[i] = objArray2[i][" Label"];    
+}
 for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = 0; scatters[i] =null;
+    seizures[i] = null; texts[i] ="";    
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
-            scatters[i] = 0;
+            seizures[i] = 100; texts[i] = text[j];
         }       
     }
 }
-console.log(seizures, scatters);
+for (var i = 0; i < objArray.length; i++) {
+    alarms[i] =null;    texts1[i] = "";
+    for (var j = 0; j < objArray2.length; j++) {
+        if (objArray[i].Time.toString() === objArray2[j].Time.toString()) {
+            alarms[i] = 100; texts1[i] =text1[j];
+        }       
+    }
+}
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
@@ -1618,37 +1648,42 @@ var activity = {
         "unit": "",
         "type": "area",
         "marker": {enabled:false},
-        "valueDecimals": 0
+        "valueDecimals": 0,
     }, {
         "name": "Beweging",
         "data": movement,
         "unit": "",
         "type": "area",
         "marker": {enabled:false},
-        "valueDecimals": 0
+        "valueDecimals": 0,
+    
     },{
         "name": "Aanvallen",
         "data": seizures,
         "unit": "",
-        "type": "line",
-        "marker": {enabled:false},
-        "valueDecimals": 0
+        "type": "scatter",
+        "marker": { radius: 10, symbol: 'diamond'},
+        "valueDecimals": 0,
+
     },
     {
         "name": "Technische alarmen",
-        "data": scatters,
+        "data": alarms,
         "unit": "",
-        "type": "line",
-        "marker": { radius: 10, symbol: 'diamond'},
-        "valueDecimals": 0
+        "type": "scatter",
+        "marker": { radius: 10, symbol: 'square'},
+        "valueDecimals": 0,
+
     }
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", null, null], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#882f8d'];
-var yAxisMax =[200, 10, 100, 10], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
-var OpacityValue = [0, 0, 0, 0.7];
-var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
+var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
+var yAxisMax =[200, 10, 100, 100], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
+var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
+var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}'];
+var Caption = texts; Caption1 =texts1;
+console.log(Caption, Caption1);
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -1706,9 +1741,18 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                     },
                     yAxis: {
                         title: {
-                            text: yAxisName[i]
+                            text: yAxisName[i],
+                            style:{
+                                color: yAxisColor[i]
+                            }
                         },
-                        max:yAxisMax[i]
+                        max:yAxisMax[i],
+                        labels:{
+                            enabled: true,
+                            style:{
+                                color: yAxisColor[i]
+                            }
+                        }
                                             
                     },  
                    
@@ -1727,13 +1771,11 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         borderRadius: 5,
                         backgroundColor: tipColor[i],
                         formatter: function(){
-                           if (i >= 2){
-                            var times = this.x;
-                                var hours1 = parseInt(times/3600);
-                                var mins1 = parseInt((parseInt(times%3600))/60);
-                                if (hours1 <10){hours1 = "0" + hours1;}
-                                if (mins1 <10){mins1 = "0" + mins1;}
-                                return hours1 + ":" + mins1;                               
+                           if (i === 2){
+                             return "<p>"+Caption[i]+"</p>";                               
+                           }
+                           if (i === 3){
+                             return "<p>"+Caption1[i]+"</p>";                               
                            }
                            return this.y;
                         },
@@ -1742,8 +1784,9 @@ var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}']
                         style: {
                             fontSize: '10px'
                         },
-                        valueDecimals: dataset.valueDecimals
-                    },               
+                        valueDecimals: dataset.valueDecimals,
+
+                    },     
                 
                     series: [{
                         data: dataset.data,
