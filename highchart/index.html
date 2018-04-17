@@ -25,7 +25,11 @@
     stroke: #245380;
     stroke-width: 2;
 }
-
+.highcharts-tooltip span{
+    width:10px;
+    overflow: auto;
+    white-space: normal !important;
+}
 </style>
 <body>
   <div id="container" style="width:100%; float:right;height:400px;"></div>
@@ -1526,6 +1530,7 @@ var array2 = CSVToArray(alarmdata);
             objArray2[i - 1][key] = array2[i][k]
         }
     }
+    
     var xValue=[], heartrate=[], movement =[], seizure =[], text =[], seizures =[], alarms =[], alarm =[], text1=[], texts =[], texts1 = [];
 for (var i = 0; i < objArray.length; i++) {
     var time =objArray[i].Time.toString();    
@@ -1562,9 +1567,9 @@ for (var i = 0; i < objArray2.length; i++) {
     alarm[i] = parseInt(hour*3600 + minute*60 + seconds);
     text1[i] = objArray2[i][" Label"];    
 }
-var ss = 100;
+var ss = 100, timeline =[];
 for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = null; texts[i] ="";    
+    seizures[i] = null; texts[i] =""; timeline[i] = 0;    
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
             seizures[i] = ss; texts[i] = text[j];
@@ -1574,7 +1579,7 @@ for (var i = 0; i < objArray.length; i++) {
 }
 var zz = 100;
 for (var i = 0; i < objArray.length; i++) {
-    alarms[i] =null;    texts1[i] = "";
+    alarms[i] = null;    texts1[i] = "";
     for (var j = 0; j < objArray2.length; j++) {
         if (objArray[i].Time.toString() === objArray2[j].Time.toString()) {
             alarms[i] = zz; texts1[i] =text1[j];
@@ -1664,12 +1669,22 @@ var activity = {
         "valueDecimals": 0,
         "text":""
     
-    },{
+    },
+    {
+        "name": "Tijd",
+        "data": timeline,
+        "unit": "",
+        "type": "line",
+        "marker": {enabled:false},
+        "valueDecimals": 0,
+        "text":""
+    },
+    {
         "name": "Aanvallen",
         "data": seizures,
         "unit": "",
         "type": "scatter",
-        "marker": { radius: 10, symbol: 'diamond'},
+        "marker": { radius: 5, symbol: 'diamond'},
         "valueDecimals": 0,
         "text":texts
     },
@@ -1678,7 +1693,7 @@ var activity = {
         "data": alarms,
         "unit": "",
         "type": "scatter",
-        "marker": { radius: 10, symbol: 'square'},
+        "marker": { radius: 5, symbol: 'square'},
         "valueDecimals": 0,
         "text":texts1
 
@@ -1686,12 +1701,11 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
-var yAxisMax =[200, 10, 100, 100], tipColor =['#ebf3fb', '#e3f8da', '#ffffff', '#ffffff'], xMin = xValue[0];
+var yAxisName = ["Slagen per minuut", "Intensiteit","Tijd", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#666666', '#882f8d','#4d79ff'];
+var yAxisMax =[200, 10, 10, 100, 100], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff', '#ffffff'], xMin = xValue[0];
 var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
-var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}'];
+var tipValue = ['{point.y}', '{point.y}','{point.x}', '{point.x}', '{point.x}'];
 var Caption = texts; Caption1 =texts1;
-console.log(Caption, Caption1);
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -1766,7 +1780,7 @@ console.log(Caption, Caption1);
                    
                     tooltip: {
                         crosshair:true,
-                        labelWidth:50, 
+                        labelWidth:100, 
                         positioner: function (labelWidth, labelHeight, point) {
                             var tooltipX = point.plotX + 55;
                             return {
@@ -1780,13 +1794,24 @@ console.log(Caption, Caption1);
                         backgroundColor: tipColor[i],
                         formatter: function(){
                            if (i === 2){
+                            var times = this.x;
+                                var hours1 = parseInt(times/3600);
+                                var mins1 = parseInt((parseInt(times%3600))/60);
+                                var seconds1 = times - hours1*3600 - mins1 * 60;
+                                if (hours1 <10){hours1 = "0" + hours1;}
+                                if (mins1 <10){mins1 = "0" + mins1;}
+                                if (seconds1 < 10){seconds1 = "0" + seconds1;}
+                                return hours1 + ":" + mins1 + ":" + seconds1;
+                           }
+                           else if (i === 3){
+                               
                              for (var j = 0; j < seizures.length; j++) {
                                  if(this.y === seizures[j]){
                                     return Caption[j];
                                  }                        
                              }                               
                            }
-                           else if (i === 3){
+                           else if (i === 4){
                             for (var j = 0; j < alarms.length; j++) {
                                  if(this.y === alarms[j]){
                                     return Caption1[j];
