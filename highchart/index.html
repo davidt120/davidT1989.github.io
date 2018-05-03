@@ -1669,16 +1669,7 @@ var activity = {
         "valueDecimals": 0,
         "text":""
     
-    },
-    {
-        "name": "Tijd",
-        "data": timeline,
-        "unit": "",
-        "type": "line",
-        "marker": {enabled:false},
-        "valueDecimals": 0,
-        "text":""
-    },
+    },  
     {
         "name": "Aanvallen",
         "data": seizures,
@@ -1701,11 +1692,11 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit","Tijd", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#666666', '#882f8d','#4d79ff'];
-var yAxisMax =[200, 10, 10, 100, 100], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff', '#ffffff'], xMin = xValue[0];
+var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
+var yAxisMax =[200, 10, 100, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0];
 var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
-var tipValue = ['{point.y}', '{point.y}','{point.x}', '{point.x}', '{point.x}'];
-var Caption = texts; Caption1 =texts1;
+var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}'];
+var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -1762,6 +1753,7 @@ var Caption = texts; Caption1 =texts1;
                         }                        
                     },
                     yAxis: {
+                        gridLineWidth: gridline[i],
                         title: {
                             text: yAxisName[i],
                             style:{
@@ -1777,6 +1769,11 @@ var Caption = texts; Caption1 =texts1;
                         }
                                             
                     },  
+                    navigation: {
+                            buttonOptions:{
+                                enabled: false
+                            }
+                        },
                    
                     tooltip: {
                         crosshair:true,
@@ -1793,7 +1790,7 @@ var Caption = texts; Caption1 =texts1;
                         borderRadius: 5,
                         backgroundColor: tipColor[i],
                         formatter: function(){
-                           if (i === 2){
+                           
                             var times = this.x;
                                 var hours1 = parseInt(times/3600);
                                 var mins1 = parseInt((parseInt(times%3600))/60);
@@ -1801,24 +1798,24 @@ var Caption = texts; Caption1 =texts1;
                                 if (hours1 <10){hours1 = "0" + hours1;}
                                 if (mins1 <10){mins1 = "0" + mins1;}
                                 if (seconds1 < 10){seconds1 = "0" + seconds1;}
-                                return hours1 + ":" + mins1 + ":" + seconds1;
-                           }
-                           else if (i === 3){
+                                var s = hours1 + ":" + mins1 + ":" + seconds1;
+                           
+                            if (i === 2){
                                
                              for (var j = 0; j < seizures.length; j++) {
                                  if(this.y === seizures[j]){
-                                    return Caption[j];
+                                    return s+" "+Caption[j];
                                  }                        
                              }                               
                            }
-                           else if (i === 4){
+                           else if (i === 3){
                             for (var j = 0; j < alarms.length; j++) {
                                  if(this.y === alarms[j]){
-                                    return Caption1[j];
+                                    return s+"  "+Caption1[j];
                                  }                        
                              }                         
                            }
-                           return this.y;
+                           return s+" "+this.y;
                         },
                         headerFormat: '',
                         shadow: false,
@@ -1827,6 +1824,20 @@ var Caption = texts; Caption1 =texts1;
                         },
                         valueDecimals: dataset.valueDecimals,
 
+                    },
+                    plotOptions :{
+                        series:{
+                            states:{
+                                    hover:{
+                                        
+                                        enabled: true,
+                                        halo:{
+                                            size: halovalue[i]
+                                        }
+                                    }
+                                }
+                        
+                        }
                     },     
                 
                     series: [{
@@ -1837,7 +1848,7 @@ var Caption = texts; Caption1 =texts1;
                         color: ChartColor[i],
                         lineWidth: 1,
                         pointStart:xMin,                        
-                        fillOpacity: 0.7,
+                        fillOpacity: 0.7,                       
                         
                     fillColor: {
                         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
