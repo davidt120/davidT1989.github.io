@@ -10,6 +10,9 @@
   .highcharts-axis .highcharts-axis-line {
 	stroke: #000000;
 }
+.axis-color-3 .highcharts-axis-line, .axis-color-4 .highcharts-axis-line{
+  stroke: #fff !important;
+}
 .highcharts-axis .highcharts-axis-line {
 	stroke-width: 2px;
 }
@@ -39664,10 +39667,11 @@
     07:32:38,98,7
     07:32:39,96,5
     07:32:40,93,5</pre>      
-    <pre id="csv_seizures" style="display:none">Time, Label
-    22:10:48,Motion
-    22:22:00,Heartrate increase
-    </pre>
+    
+    <pre id="csv_no_alarms" style="display:none">Starttime,Stoptime
+    21:01:05, 22:05:07
+    02:08:02, 02:31:45
+    06:39:22, 06:45:11</pre>
     <pre id="csv_alarm" style="display:none">Time, Label
     22:09:48,Lost connection
     22:15:00,Battery low
@@ -39726,11 +39730,12 @@ function CSVToArray(strData, strDelimiter) {
 }
 
 csvdata = document.getElementById("csv").innerHTML;
-seizuresdata = document.getElementById("csv_seizures").innerHTML;
+noalarms = document.getElementById("csv_no_alarms").innerHTML;
 alarmdata = document.getElementById("csv_alarm").innerHTML;
+
 var array = CSVToArray(csvdata);
-var array1 = CSVToArray(seizuresdata);
 var array2 = CSVToArray(alarmdata);
+var array3 = CSVToArray(noalarms);
     var objArray = [];
     for (var i = 1; i < array.length; i++) {
         objArray[i - 1] = {};
@@ -39740,14 +39745,6 @@ var array2 = CSVToArray(alarmdata);
         }
     }
 
-    var objArray1 = [];
-    for (var i = 1; i < array1.length; i++) {
-        objArray1[i - 1] = {};
-        for (var k = 0; k < array1[0].length && k < array1[i].length; k++) {
-            var key = array1[0][k];
-            objArray1[i - 1][key] = array1[i][k]
-        }
-    }
     var objArray2 = [];
     for (var i = 1; i < array2.length; i++) {
         objArray2[i - 1] = {};
@@ -39756,8 +39753,16 @@ var array2 = CSVToArray(alarmdata);
             objArray2[i - 1][key] = array2[i][k]
         }
     }
-    console.log(objArray[1].Time.toString());
-    var xValue=[], heartrate=[], movement =[], seizure =[], text =[], seizures =[], alarms =[], alarm =[], text1=[], texts =[], texts1 = [];
+    var objArray3 = [];
+    for (var i = 1; i < array3.length; i++) {
+        objArray3[i - 1] = {};
+        for (var k = 0; k < array3[0].length && k < array3[i].length; k++) {
+            var key = array3[0][k];
+            objArray3[i - 1][key] = array3[i][k]
+        }
+    }
+
+    var xValue=[], heartrate=[], movement =[], alarms =[], alarm =[], noalarm_start=[], noalarm_stop=[], noalarms=[], text1=[], texts1 = [];
 for (var i = 0; i < objArray.length; i++) {
     var time =objArray[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -39775,21 +39780,6 @@ for (var i = 0; i < objArray.length; i++) {
     movement[i] = parseInt(objArray[i][" Movement"]);
 }
 
-for (var i = 0; i < objArray1.length; i++) {
-    var time =objArray1[i].Time.toString();    
-    var realtime =time.replace(/\s/g, '').toString();
-    var hms = realtime.split(":");
-    if(hms[0].search("0") == 0){
-    	var hour = parseInt(hms[0]) + 24;
-    }
-    else{
-    	var hour = parseInt(hms[0]);
-    }    
-    var minute = parseInt(hms[1]);
-    var seconds = parseInt(hms[2]);
-    seizure[i] = parseInt(hour*3600 + minute*60 + seconds);
-    text[i] = objArray1[i][" Label"];    
-}
 for (var i = 0; i < objArray2.length; i++) {
     var time =objArray2[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -39805,16 +39795,35 @@ for (var i = 0; i < objArray2.length; i++) {
     alarm[i] = parseInt(hour*3600 + minute*60 + seconds);
     text1[i] = objArray2[i][" Label"];    
 }
-var ss = 100, timeline =[];
-for (var i = 0; i < objArray.length; i++) {
-    seizures[i] = null; texts[i] =""; timeline[i] = 0;    
-    for (var j = 0; j < objArray1.length; j++) {
-        if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
-            seizures[i] = ss; texts[i] = text[j];
-            ss = ss + 1;
-        }       
+
+for (var i = 0; i < objArray3.length; i++) {
+    var time =objArray3[i].Starttime.toString();    
+    var realtime =time.replace(/\s/g, '').toString();
+    var hms = realtime.split(":");
+    if(hms[0].search("0") == 0){
+    	var hour = parseInt(hms[0]) + 24;
     }
+    else{
+    	var hour = parseInt(hms[0]);
+    }    
+    var minute = parseInt(hms[1]);
+    var seconds = parseInt(hms[2]);
+    noalarm_start[i] = parseInt(hour*3600 + minute*60 + seconds);
+    var time1 =objArray3[i].Stoptime.toString();    
+    var realtime1 =time1.replace(/\s/g, '').toString();
+    var hms1 = realtime1.split(":");
+    if(hms1[0].search("0") == 0){
+    	var hour1 = parseInt(hms1[0]) + 24;
+    }
+    else{
+    	var hour1 = parseInt(hms1[0]);
+    }    
+    var minute1 = parseInt(hms1[1]);
+    var seconds1 = parseInt(hms1[2]);
+    noalarm_stop[i] = parseInt(hour1*3600 + minute1*60 + seconds1);    
 }
+
+var ss = 100;
 var zz = 100;
 for (var i = 0; i < objArray.length; i++) {
     alarms[i] = null;    texts1[i] = "";
@@ -39825,6 +39834,26 @@ for (var i = 0; i < objArray.length; i++) {
         }       
     }
 }
+var start_point = [], stop_point = [];
+for (var i = 0; i < objArray.length; i++) {
+    for (var j = 0; j < objArray3.length; j++) {
+        if ((xValue[i] == noalarm_start[j])) {
+          start_point[j] = i;                      
+        }
+        if ((xValue[i] == noalarm_stop[j])) {
+          stop_point[j] = i;                      
+        }              
+    }
+}
+for (var i = 0; i < objArray.length; i++) {
+    noalarms[i] = null;
+    for (var j = 0; j < objArray3.length; j++) {
+        for (var k = start_point[j]; k <= stop_point[j]; k++) {
+          noalarms[k] = ss;          
+        }              
+    }
+}
+
 /**
  * In order to synchronize tooltips and crosshairs, override the
  * built-in events with handlers defined on the parent element.
@@ -39910,12 +39939,12 @@ var activity = {
     },  
     {
         "name": "Aanvallen",
-        "data": seizures,
+        "data": noalarms,
         "unit": "",
-        "type": "scatter",
-        "marker": { radius: 5, symbol: 'diamond'},
+        "type": "area",
+        "marker": {enabled:false},
         "valueDecimals": 0,
-        "text":texts
+        "text":""
     },
     {
         "name": "Technische alarmen",
@@ -39930,11 +39959,10 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
-var yAxisMax =[200, 10, 100, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0];
+var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 102, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
+var yAxisMax =[200, 10, 102, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4'];
 var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
-var tipValue = ['{point.y}', '{point.y}', '{point.x}', '{point.x}'];
-var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
+var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -39981,8 +40009,7 @@ var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 
                                 if(i<2){
                                 var times = this.value;
                                 var hours1 = parseInt(times/3600);                                
-                                var mins1 = parseInt((parseInt(times%3600))/60);
-                                console.log(hours1, mins1);
+                                var mins1 = parseInt((parseInt(times%3600))/60);                                
                                 if(hours1>24){hours1 = hours1 - 24}
                                 if (hours1 <10){hours1 = "0" + hours1;}
                                 if (mins1 <10){mins1 = "0" + mins1;}
@@ -39994,6 +40021,7 @@ var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 
                         }                        
                     },
                     yAxis: {
+                      className: Axiscolor[i],
                         gridLineWidth: gridline[i],
                         title: {
                             text: yAxisName[i],
@@ -40043,12 +40071,13 @@ var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 
                                 var s = hours1 + ":" + mins1 + ":" + seconds1;
                            
                             if (i === 2){
-                               
-                             for (var j = 0; j < seizures.length; j++) {
-                                 if(this.y === seizures[j]){
-                                    return s+" "+Caption[j];
-                                 }                        
-                             }                               
+                             
+                              for (var k = 0; k < 3; k++) {
+                                    if((this.x>=noalarm_start[k]) && (this.x <= noalarm_stop[k])){
+                                      return timed(noalarm_start[k]) + "-" + timed(noalarm_stop[k]) + " No alarms";
+                                    }                                                         
+                              }                                                       
+                                                           
                            }
                            else if (i === 3){
                             for (var j = 0; j < alarms.length; j++) {
@@ -40108,7 +40137,18 @@ var Caption = texts; Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 
                 });
         });
   
-
+function timed(xval){
+  var times = xval;
+                                var hours1 = parseInt(times/3600);                                
+                                var mins1 = parseInt((parseInt(times%3600))/60);
+                                var seconds1 = times - hours1*3600 - mins1 * 60;
+                                if(hours1>24){hours1 = hours1 -24;}
+                                if (hours1 <10){hours1 = "0" + hours1;}
+                                if (mins1 <10){mins1 = "0" + mins1;}
+                                if (seconds1 < 10){seconds1 = "0" + seconds1;}
+                                var s = hours1 + ":" + mins1 + ":" + seconds1;
+                return s;
+}
 
   </script>
 </body>
