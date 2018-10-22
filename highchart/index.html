@@ -39823,7 +39823,7 @@ for (var i = 0; i < objArray3.length; i++) {
     noalarm_stop[i] = parseInt(hour1*3600 + minute1*60 + seconds1);    
 }
 
-var ss = 100;
+var ss = 20;
 var zz = 100;
 for (var i = 0; i < objArray.length; i++) {
     alarms[i] = null;    texts1[i] = "";
@@ -39959,10 +39959,10 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 102, 80], ChartColor =['#8ab6e7', '#a6ea89', '#882f8d','#4d79ff'];
-var yAxisMax =[200, 10, 102, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4'];
-var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
-var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
+var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 100, 80], ChartColor =['#8ab6e7', '#a6ea89', '#000000','#4d79ff'];
+var yAxisMax =[200, 10, 50, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4'];
+var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false], XlineColor = ['#ffffff', '#ffffff', '#000000', '#ffffff'];
+var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0], offsetValue = [0, 0, -5, 0];
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -40001,7 +40001,8 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                             setExtremes: syncExtremes
                         },
                         min: xMin,
-                    
+                        offset: offsetValue[i],    
+                                            
                         labels: {
                           
                           
@@ -40037,7 +40038,8 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                             }
                         }
                                             
-                    },  
+                    },
+                   
                     navigation: {
                             buttonOptions:{
                                 enabled: false
@@ -40074,7 +40076,7 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                              
                               for (var k = 0; k < 3; k++) {
                                     if((this.x>=noalarm_start[k]) && (this.x <= noalarm_stop[k])){
-                                      return timed(noalarm_start[k]) + "-" + timed(noalarm_stop[k]) + " No alarms";
+                                      return timed(noalarm_start[k]) + "-" + timed(noalarm_stop[k]) + " Detectie niet actief";
                                     }                                                         
                               }                                                       
                                                            
@@ -40096,6 +40098,7 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                         valueDecimals: dataset.valueDecimals,
 
                     },
+                    
                     plotOptions :{
                         series:{
                             states:{
@@ -40106,7 +40109,8 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                                             size: halovalue[i]
                                         }
                                     }
-                                }
+                                },
+                            
                         
                         }
                     },     
@@ -40118,16 +40122,9 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0];
                         marker: dataset.marker,
                         color: ChartColor[i],
                         lineWidth: 1,
-                        pointStart:xMin,                        
-                        fillOpacity: 0.7,                       
-                        
-                    fillColor: {
-                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                        stops: [
-                            [0, ChartColor[i]],
-                            [1, '#f4f4f4']
-                        ]
-                    },
+                        pointStart:xMin,              
+                        fillOpacity: 0.3,
+                   
                         tooltip: {  
                             crosshair:[true, true],
                             align: 'left',                         
@@ -40149,6 +40146,7 @@ function timed(xval){
                                 var s = hours1 + ":" + mins1 + ":" + seconds1;
                 return s;
 }
+
 
   </script>
 </body>
