@@ -10,7 +10,7 @@
   .highcharts-axis .highcharts-axis-line {
 	stroke: #000000;
 }
-.axis-color-3 .highcharts-axis-line, .axis-color-4 .highcharts-axis-line{
+.axis-color-3 .highcharts-axis-line, .axis-color-4 .highcharts-axis-line, .axis-color-5 .highcharts-axis-line{
   stroke: #fff !important;
 }
 .highcharts-axis .highcharts-axis-line {
@@ -32,6 +32,12 @@
     width:10px;
     overflow: auto;
     white-space: normal !important;
+}
+.chart:nth-child(4){
+  margin-top: -80px;
+}
+.chart:nth-child(4) rect{
+  fill-opacity: 0;
 }
 </style>
 <body>
@@ -39672,10 +39678,12 @@
     21:01:05, 22:05:07
     02:08:02, 02:31:45
     06:39:22, 06:45:11</pre>
+    <pre id="csv_seizures" style="display:none">Time, Label
+    22:57:50,Motion
+    06:36:51,Heartrate increase</pre>
     <pre id="csv_alarm" style="display:none">Time, Label
     22:09:48,Lost connection
-    22:15:00,Battery low
-        </pre>
+    22:15:00,Battery low</pre>
     
   <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
   <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -39731,9 +39739,11 @@ function CSVToArray(strData, strDelimiter) {
 
 csvdata = document.getElementById("csv").innerHTML;
 noalarms = document.getElementById("csv_no_alarms").innerHTML;
+seizuresdata = document.getElementById("csv_seizures").innerHTML;
 alarmdata = document.getElementById("csv_alarm").innerHTML;
 
 var array = CSVToArray(csvdata);
+var array1 = CSVToArray(seizuresdata);
 var array2 = CSVToArray(alarmdata);
 var array3 = CSVToArray(noalarms);
     var objArray = [];
@@ -39744,7 +39754,15 @@ var array3 = CSVToArray(noalarms);
             objArray[i - 1][key] = array[i][k]
         }
     }
-
+    var objArray1 = [];
+    for (var i = 1; i < array1.length; i++) {
+        objArray1[i - 1] = {};
+        for (var k = 0; k < array1[0].length && k < array1[i].length; k++) {
+            var key = array1[0][k];
+            objArray1[i - 1][key] = array1[i][k]
+        }
+    }
+  
     var objArray2 = [];
     for (var i = 1; i < array2.length; i++) {
         objArray2[i - 1] = {};
@@ -39762,7 +39780,7 @@ var array3 = CSVToArray(noalarms);
         }
     }
 
-    var xValue=[], heartrate=[], movement =[], alarms =[], alarm =[], noalarm_start=[], noalarm_stop=[], noalarms=[], text1=[], texts1 = [];
+    var xValue=[], heartrate=[], movement =[], seizure =[], seizures =[],  text =[], texts =[], alarms =[], alarm =[], noalarm_start=[], noalarm_stop=[], noalarms=[], text1=[], texts1 = [];
 for (var i = 0; i < objArray.length; i++) {
     var time =objArray[i].Time.toString();    
     var realtime =time.replace(/\s/g, '').toString();
@@ -39778,6 +39796,17 @@ for (var i = 0; i < objArray.length; i++) {
     xValue[i] =parseInt(hour*3600 + minute*60 + seconds);  
     heartrate[i] =parseInt(objArray[i][" Heartrate"]);
     movement[i] = parseInt(objArray[i][" Movement"]);
+}
+for (var i = 0; i < objArray1.length; i++) {
+    var time =objArray1[i].Time.toString();    
+    var realtime =time.replace(/\s/g, '').toString();
+    var hms = realtime.split(":");
+    var hour = parseInt(hms[0]);
+    hour1 = hour.toString();
+    var minute = parseInt(hms[1]);
+    var seconds = parseInt(hms[2]);
+    seizure[i] = parseInt(hour*3600 + minute*60 + seconds);
+    text[i] = objArray1[i][" Label"];    
 }
 
 for (var i = 0; i < objArray2.length; i++) {
@@ -39824,13 +39853,25 @@ for (var i = 0; i < objArray3.length; i++) {
 }
 
 var ss = 20;
-var zz = 100;
+var zz = 100, dd = 100;
+console.log(objArray1[1].Time.toString());
+for (var i = 0; i < objArray.length; i++) {
+    seizures[i] = null; texts[i] ="";    
+    for (var j = 0; j < objArray1.length; j++) {
+        if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
+            seizures[i] = dd; texts[i] = text[j];
+            dd = dd + 1;
+            console.log(seizures[i]);
+        }       
+    }
+}
 for (var i = 0; i < objArray.length; i++) {
     alarms[i] = null;    texts1[i] = "";
     for (var j = 0; j < objArray2.length; j++) {
         if (objArray[i].Time.toString() === objArray2[j].Time.toString()) {
             alarms[i] = zz; texts1[i] =text1[j];
             zz = zz + 1;
+            
         }       
     }
 }
@@ -39947,6 +39988,15 @@ var activity = {
         "text":""
     },
     {
+        "name": "",
+        "data": seizures,
+        "unit": "",
+        "type": "scatter",
+        "marker": { radius: 5, symbol: 'diamond'},
+        "valueDecimals": 0,
+        "text":texts
+    },
+    {
         "name": "Technische alarmen",
         "data": alarms,
         "unit": "",
@@ -39959,10 +40009,10 @@ var activity = {
     
         ]
 };
-var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff"], Chartheight = [400, 200, 100, 80], ChartColor =['#8ab6e7', '#a6ea89', '#000000','#4d79ff'];
-var yAxisMax =[200, 10, 50, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4'];
-var OpacityValue = [0, 0, 0, 0.7], enable =[true, true, false, false];
-var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0], offsetValue = [0, 0, -5, 0];
+var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures","", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff", "#ffffff"], Chartheight = [400, 200, 100, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#000000', '#882f8d', '#4d79ff'];
+var yAxisMax =[200, 10, 50, 100, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4', 'axis-color-5'];
+var OpacityValue = [0, 0, 0, 0, 0.7], enable =[true, true, false, false, false];
+var Caption = texts, Caption1 =texts1, gridline = [1, 1, 0, 0, 0], halovalue =[10, 10, 0, 0, 0], offsetValue = [0, 0, -5, 0, 0];
         $.each(activity.datasets, function (i, dataset) {
             // Add X values
             dataset.data = Highcharts.map(dataset.data, function (val, j) {
@@ -40082,6 +40132,13 @@ var Caption1 =texts1, gridline = [1, 1, 0, 0], halovalue =[10, 10, 0, 0], offset
                                                            
                            }
                            else if (i === 3){
+                            for (var j = 0; j < seizures.length; j++) {
+                                 if(this.y === seizures[j]){
+                                    return s+"  "+Caption[j];
+                                 }                        
+                             }                         
+                           }
+                           else if (i === 4){
                             for (var j = 0; j < alarms.length; j++) {
                                  if(this.y === alarms[j]){
                                     return s+"  "+Caption1[j];
