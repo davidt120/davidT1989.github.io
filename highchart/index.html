@@ -39853,15 +39853,13 @@ for (var i = 0; i < objArray3.length; i++) {
 }
 
 var ss = 20;
-var zz = 100, dd = 100;
-console.log(objArray1[1].Time.toString());
+var zz = 100, dd = 15;
+
 for (var i = 0; i < objArray.length; i++) {
     seizures[i] = null; texts[i] ="";    
     for (var j = 0; j < objArray1.length; j++) {
         if (objArray[i].Time.toString() === objArray1[j].Time.toString()) {
-            seizures[i] = dd; texts[i] = text[j];
-            dd = dd + 1;
-            console.log(seizures[i]);
+            seizures[i] = dd; texts[i] = text[j];            
         }       
     }
 }
@@ -39870,8 +39868,6 @@ for (var i = 0; i < objArray.length; i++) {
     for (var j = 0; j < objArray2.length; j++) {
         if (objArray[i].Time.toString() === objArray2[j].Time.toString()) {
             alarms[i] = zz; texts1[i] =text1[j];
-            zz = zz + 1;
-            
         }       
     }
 }
