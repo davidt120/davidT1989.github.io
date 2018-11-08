@@ -39675,9 +39675,13 @@
     07:32:40,93,5</pre>      
     
     <pre id="csv_no_alarms" style="display:none">Starttime,Stoptime
-    21:01:05, 22:05:07
-    02:08:02, 02:31:45
-    06:39:22, 06:45:11</pre>
+    21:38:43,21:46:45
+    22:11:08,22:13:30
+    23:44:57,23:56:34
+    00:01:03,00:04:25
+    01:58:44,02:16:20
+    05:40:15,06:11:23
+    07:28:58,07:34:10</pre>
     <pre id="csv_seizures" style="display:none">Time, Label
     22:57:50,Motion
     06:36:51,Heartrate increase</pre>
@@ -40005,6 +40009,7 @@ var activity = {
     
         ]
 };
+console.log(noalarm_start);
 var yAxisName = ["Slagen per minuut", "Intensiteit", "Seizures","", "Technische alarmen"],yAxisColor = ["#666666", "#666666", "#ffffff", "#ffffff", "#ffffff"], Chartheight = [400, 200, 100, 80, 80], ChartColor =['#8ab6e7', '#a6ea89', '#000000', '#882f8d', '#4d79ff'];
 var yAxisMax =[200, 10, 50, 100, 101], tipColor =['#ebf3fb', '#e3f8da','#ffffff', '#ffffff', '#ffffff'], xMin = xValue[0], Axiscolor = ['axis-color-1', 'axis-color-2', 'axis-color-3', 'axis-color-4', 'axis-color-5'];
 var OpacityValue = [0, 0, 0, 0, 0.7], enable =[true, true, false, false, false];
@@ -40120,7 +40125,7 @@ var Caption = texts, Caption1 =texts1, gridline = [1, 1, 0, 0, 0], halovalue =[1
                            
                             if (i === 2){
                              
-                              for (var k = 0; k < 3; k++) {
+                              for (var k = 0; k < noalarm_start.length; k++) {
                                     if((this.x>=noalarm_start[k]) && (this.x <= noalarm_stop[k])){
                                       return timed(noalarm_start[k]) + "-" + timed(noalarm_stop[k]) + " Detectie niet actief";
                                     }                                                         
